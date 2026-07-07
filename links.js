@@ -29,7 +29,8 @@ const LINKS = {
       href: "https://w5e.carrd.co/",
       label: "W5e",
       desc: "Edytor W5",
-      favicon: "../assets/images/favicon.ico",
+      favicon:
+        "https://raw.githubusercontent.com/s-pro-v/os_pro/refs/heads/main/assets/images/favicon.png",
     },
     {
       href: "https://txtpro.carrd.co/",

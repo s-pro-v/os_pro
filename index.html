@@ -8,6 +8,8 @@
 
   <script src="lks-guard.strict.js"></script>
   <title>Glass — Dev Links</title>
+  <link rel="icon" type="image/png"
+    href="https://raw.githubusercontent.com/s-pro-v/os_pro/refs/heads/main/assets/images/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -31,7 +33,9 @@
       <div class="panel__layout">
         <aside class="panel__aside">
           <div class="panel__visual">
-            <img id="panel-image" src="../assets/images/image02.png" alt="" width="300" height="300" />
+            <img id="panel-image"
+              src="https://raw.githubusercontent.com/s-pro-v/os_pro/refs/heads/main/assets/images/image02.png" alt=""
+              width="300" height="300" />
           </div>
           <header class="panel__header">
             <h1 class="panel__title" id="panel-title">Home</h1>
@@ -83,7 +87,19 @@
               </span>
               <span>All</span>
             </button>
-            <div class="nav-pill nav-pill--blocker"></div>
+            <div class="nav-pill nav-pill--blocker">
+              <span class="nav-pill__lks" id="lks-nav-status" data-lks-state="wait" aria-live="polite">
+                <span class="nav-pill__lks-dot" aria-hidden="true"></span>
+                <span class="nav-pill__lks-label">LKS</span>
+                <span class="nav-pill__lks-meta">
+                  <span class="nav-pill__lks-status">Czekaj…</span>
+                  <span class="nav-pill__lks-sep" aria-hidden="true">·</span>
+                  <span class="nav-pill__lks-date" id="lks-nav-date">--.--.----</span>
+                  <span class="nav-pill__lks-sep" aria-hidden="true">·</span>
+                  <time class="nav-pill__lks-time" id="lks-nav-time">--:--:--</time>
+                </span>
+              </span>
+            </div>
           </nav>
 
           <div class="divider"></div>

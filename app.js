@@ -1,33 +1,36 @@
+const ASSET_IMG =
+  "https://raw.githubusercontent.com/s-pro-v/os_pro/refs/heads/main/assets/images";
+
 const meta = {
   home: {
     title: "Home",
     subtitle: "Panel deweloperski",
     bg: "home",
-    image: "../assets/images/image02.png",
+    image: `${ASSET_IMG}/image02.png`,
   },
   form: {
     title: "Code Edit",
     subtitle: "Edytory kodu",
     bg: "form",
-    image: "../assets/images/image07.png",
+    image: `${ASSET_IMG}/image07.png`,
   },
   folder: {
     title: "Text Edit",
     subtitle: "Narzędzia i pliki",
     bg: "folder",
-    image: "../assets/images/image01.png",
+    image: `${ASSET_IMG}/image01.png`,
   },
   all: {
     title: "All",
     subtitle: "Wszystkie linki",
     bg: "all",
-    image: "../assets/images/image05.png",
+    image: `${ASSET_IMG}/image05.png`,
   },
   privacy: {
     title: "Polityka Prywatności",
     subtitle: "",
     bg: "privacy",
-    image: "../assets/images/image02.png",
+    image: `${ASSET_IMG}/image02.png`,
   },
 };
 
@@ -40,7 +43,6 @@ const navPillButtons = document.querySelectorAll(
 );
 const sections = document.querySelectorAll(".section");
 const bgLayers = document.querySelectorAll(".bg__layer");
-const privacyLink = document.querySelector(".privacy-link");
 const panelContent = document.querySelector(".panel__content");
 
 const BG_IMAGES = [
@@ -118,7 +120,7 @@ function renderLinks() {
 
     list.innerHTML = links
       .map((link) => {
-        const favicon = getFaviconUrl(link.href);
+        const favicon = link.favicon || getFaviconUrl(link.href);
         return `
       <li>
         <a class="glass-btn" href="${link.href}" target="_blank" rel="noopener">
@@ -158,8 +160,9 @@ function showSection(name) {
   });
 
   const isPrivacy = name === "privacy";
-  if (privacyLink) {
-    privacyLink.classList.toggle("is-hidden", isPrivacy);
+  const privacyBlock = document.querySelector(".panel__privacy");
+  if (privacyBlock) {
+    privacyBlock.classList.toggle("is-hidden", isPrivacy);
   }
   if (panelContent)
     panelContent.classList.toggle("panel__content--privacy", isPrivacy);
@@ -228,6 +231,17 @@ preloadBackgrounds();
 renderLinks();
 if (imageEl) imageEl.dataset.src = meta.home.image;
 showSection("home");
+
+if (window.LKS_GUARD) {
+  window.LKS_GUARD.startNavClock?.();
+  if (typeof window.LKS_GUARD.sessOk === "function") {
+    if (window.LKS_GUARD.sessOk()) {
+      window.LKS_GUARD.updateNavStatus?.("ok", "OK", "SESJA");
+    } else {
+      window.LKS_GUARD.updateNavStatus?.("wait", "LKS", "CZEKAJ…");
+    }
+  }
+}
 
 // Add these to your existing script section
 document.addEventListener("DOMContentLoaded", function () {

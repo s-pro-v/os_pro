@@ -20,6 +20,10 @@
       C.HUB_URL ||
       (S && S.getAttribute("data-lks-hub")) ||
       "https://s-pro-v.github.io/guard/",
+    RU =
+      C.SITE_URL ||
+      (S && S.getAttribute("data-lks-site-url")) ||
+      "https://s-pro-v.github.io/os_pro/",
     SK =
       C.SESSION_KEY ||
       (S && S.getAttribute("data-lks-session-key")) ||
@@ -39,7 +43,7 @@
     KEY = "";
   }
   var css =
-    "#L0{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#111;font:10px monospace;color:#ccc}body *{visibility:hidden!important}#L0,#L0 *{visibility:visible!important}body.lks-guard-passed *{visibility:visible!important}#L0.d{opacity:0;visibility:hidden;pointer-events:none}#L1{max-width:92vw;padding:16px;border:1px solid #444;border-top:3px solid #f60;background:#222}#L2{margin:0 0 6px;font-weight:bold;letter-spacing:.15em;color:#f60}#L3{margin:0;color:#888}.L{display:flex;gap:6px;justify-content:center;margin:0 0 8px}.L b{width:8px;height:8px;background:#333;border-left:2px solid #f60;animation:w .75s infinite}.L b:nth-child(2){animation-delay:.1s}.L b:nth-child(3){animation-delay:.2s}.L b:nth-child(4){animation-delay:.3s}.L b:nth-child(5){animation-delay:.4s}@keyframes w{0%,100%{opacity:.35}50%{opacity:1}}#L1.ok{border-top-color:#284}#L1.ok #L2{color:#284}#L1.er{border-top-color:#a33}#L1.er #L2{color:#e55}#L1.er #L3{color:#eaa}#L1.er .L b{border-left-color:#a33;animation:none;opacity:.45}";
+    "#L0{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#111;font:10px monospace;color:#ccc}body *{visibility:hidden!important}#L0,#L0 *{visibility:visible!important}body.lks-guard-passed *{visibility:visible!important}body.lks-guard-passed .is-hidden,body.lks-guard-passed .is-hidden *{visibility:hidden!important;opacity:0!important;pointer-events:none!important}#L0.d{opacity:0;visibility:hidden;pointer-events:none}#L1{max-width:92vw;padding:16px;border:1px solid #444;border-top:3px solid #f60;background:#222}#L2{margin:0 0 6px;font-weight:bold;letter-spacing:.15em;color:#f60}#L3{margin:0;color:#888}.L{display:flex;gap:6px;justify-content:center;margin:0 0 8px}.L b{width:8px;height:8px;background:#333;border-left:2px solid #f60;animation:w .75s infinite}.L b:nth-child(2){animation-delay:.1s}.L b:nth-child(3){animation-delay:.2s}.L b:nth-child(4){animation-delay:.3s}.L b:nth-child(5){animation-delay:.4s}@keyframes w{0%,100%{opacity:.35}50%{opacity:1}}#L1.ok{border-top-color:#284}#L1.ok #L2{color:#284}#L1.er{border-top-color:#a33}#L1.er #L2{color:#e55}#L1.er #L3{color:#eaa}#L1.er .L b{border-left-color:#a33;animation:none;opacity:.45}";
   function sty() {
     if ($("Z")) return;
     var s = d.createElement("style");
@@ -82,6 +86,49 @@
     }
     return x === "VALID" && y === t;
   }
+  function updateNavStatus(state, label, meta) {
+    var el = $("lks-nav-status");
+    if (!el) return;
+    el.dataset.lksState = state;
+    var labelEl = el.querySelector(".nav-pill__lks-label");
+    var statusEl = el.querySelector(".nav-pill__lks-status");
+    if (labelEl)
+      labelEl.textContent = label || String(state || "LKS").toUpperCase();
+    if (statusEl && meta != null) statusEl.textContent = meta;
+  }
+  function formatLocalDate(date) {
+    return date.toLocaleDateString("pl-PL", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  }
+  function formatLocalTime(date) {
+    return date.toLocaleTimeString("pl-PL", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  }
+  function updateNavDateTime() {
+    var now = new Date();
+    var dateEl = $("lks-nav-date");
+    var timeEl = $("lks-nav-time");
+    if (dateEl) dateEl.textContent = formatLocalDate(now);
+    if (timeEl) {
+      timeEl.textContent = formatLocalTime(now);
+      timeEl.dateTime = now.toISOString();
+    }
+  }
+  var navClockId = 0;
+  function startNavClock() {
+    updateNavDateTime();
+    if (navClockId) clearInterval(navClockId);
+    navClockId = setInterval(updateNavDateTime, 1000);
+  }
+  function syncNavStatusOk() {
+    updateNavStatus("ok", "OK", "SESJA");
+  }
   function setSt(x, w) {
     var p = $("L1"),
       a = $("L2"),
@@ -100,6 +147,7 @@
     bodyEl.classList.remove("lks-page-loading");
     var o = $("L0");
     if (o) o.classList.add("d");
+    syncNavStatusOk();
   }
   function redir(e) {
     var o = $("L0"),
@@ -118,6 +166,7 @@
     }
     if (a) a.textContent = "STOP";
     if (s) s.textContent = e ? "Sesja→hub" : "Brak→hub";
+    updateNavStatus("stop", "STOP", e ? "SESJA→HUB" : "BRAK→HUB");
     var g = H || location.origin + "/",
       u = returnUrl();
     setTimeout(function () {
@@ -140,6 +189,7 @@
   }
   function go() {
     setSt("", 1);
+    updateNavStatus("wait", "LKS", "OK…");
     setTimeout(function () {
       hide();
       watch();
@@ -180,8 +230,15 @@
     o.innerHTML =
       '<div id="L1"><div class="L"><b></b><b></b><b></b><b></b><b></b></div><p id="L2">LKS</p><p id="L3">Czekaj…</p></div>';
     bodyEl.appendChild(o);
+    updateNavStatus("wait", "LKS", "CZEKAJ…");
+    startNavClock();
     run();
   }
+  window.LKS_GUARD = C;
+  C.updateNavStatus = updateNavStatus;
+  C.updateNavDateTime = updateNavDateTime;
+  C.startNavClock = startNavClock;
+  C.sessOk = sessOk;
   if (d.readyState === "loading") d.addEventListener("DOMContentLoaded", mount);
   else mount();
 })();
