@@ -11,6 +11,16 @@ function cleanDomain(url) {
     .split("/")[0];
 }
 
+function githubProjectSlug(href) {
+  try {
+    const { hostname, pathname } = new URL(href);
+    if (!hostname.endsWith("github.io")) return "";
+    return pathname.split("/").filter(Boolean)[0] || "";
+  } catch {
+    return "";
+  }
+}
+
 function getFaviconChain(href) {
   const domain = cleanDomain(href);
   const chain = [];
@@ -20,6 +30,12 @@ function getFaviconChain(href) {
       `https://${domain}/assets/images/favicon.png`,
       `https://${domain}/assets/images/apple-touch-icon.png`,
     );
+  } else if (domain.endsWith("github.io")) {
+    const slug = githubProjectSlug(href);
+    if (slug) {
+      chain.push(`https://${domain}/${slug}/assets/images/favicon.png`);
+    }
+    chain.push(`https://${domain}/favicon.ico`);
   } else {
     chain.push(`https://${domain}/favicon.ico`);
   }
