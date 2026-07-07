@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <script src="lks-guard.js"></script>
+  <title>Glass — Dev Links</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Tektur:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="bg__layer bg__layer--active" data-bg="home"></div>
+    <div class="bg__layer" data-bg="form"></div>
+    <div class="bg__layer" data-bg="folder"></div>
+    <div class="bg__layer" data-bg="all"></div>
+    <div class="bg__layer" data-bg="privacy"></div>
+    <div class="bg__overlay"></div>
+  </div>
+
+  <div class="app">
+    <main class="panel glass" id="main-panel">
+      <div class="panel__layout">
+        <aside class="panel__aside">
+          <div class="panel__visual">
+            <img id="panel-image" src="../assets/images/image02.png" alt="" width="300" height="300" />
+          </div>
+          <header class="panel__header">
+            <h1 class="panel__title" id="panel-title">Home</h1>
+            <p class="panel__subtitle" id="panel-subtitle">Panel deweloperski</p>
+            <p class="panel__privacy">
+              <button type="button" class="glass-btn glass-btn--privacy privacy-link" data-section="privacy">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M12 2 4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3Zm0 2.18 6 2.25V11c0 3.64-2.4 7.02-6 8.18-3.6-1.16-6-4.54-6-8.18V6.43l6-2.25ZM11 10v3h2v-3h-2Z" />
+                </svg>
+                <span>Privacy Policy</span>
+              </button>
+            </p>
+          </header>
+        </aside>
+
+        <div class="panel__content">
+          <nav class="nav-pills" aria-label="Sekcje">
+            <button type="button" class="nav-pill nav-pill--active" data-section="home">
+              <span class="nav-pill__media" aria-hidden="true">
+                <svg class="nav-pill__icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5Z" />
+                </svg>
+              </span>
+              <span>Home</span>
+            </button>
+            <button type="button" class="nav-pill" data-section="form">
+              <span class="nav-pill__media" aria-hidden="true">
+                <svg class="nav-pill__icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Zm0 2.5L18.5 9H14V4.5ZM8 13h8v2H8v-2Zm0 4h5v2H8v-2Z" />
+                </svg>
+              </span>
+              <span>Form</span>
+            </button>
+            <button type="button" class="nav-pill" data-section="folder">
+              <span class="nav-pill__media" aria-hidden="true">
+                <svg class="nav-pill__icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 5a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5Z" />
+                </svg>
+              </span>
+              <span>Folder</span>
+            </button>
+            <button type="button" class="nav-pill" data-section="all">
+              <span class="nav-pill__media" aria-hidden="true">
+                <svg class="nav-pill__icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 6h16v2H4V6Zm0 5h16v2H4v-2Zm0 5h10v2H4v-2Z" />
+                </svg>
+              </span>
+              <span>All</span>
+            </button>
+            <div class="nav-pill nav-pill--blocker"></div>
+          </nav>
+
+          <div class="divider"></div>
+
+          <div class="panel__sections">
+            <section class="section section--active" data-section="home" aria-labelledby="panel-title">
+              <ul class="link-list" data-links="home"></ul>
+            </section>
+
+            <section class="section" data-section="form" hidden>
+              <ul class="link-list" data-links="form"></ul>
+            </section>
+
+            <section class="section" data-section="folder" hidden>
+              <ul class="link-list" data-links="folder"></ul>
+            </section>
+
+            <section class="section" data-section="all" hidden>
+              <ul class="link-list" data-links="all"></ul>
+            </section>
+
+            <section class="section section--privacy" data-section="privacy" hidden>
+              <div class="privacy glass glass--inner">
+                <p><em>Polityka Prywatności</em></p>
+                <p><em>1. Informacje ogólne</em></p>
+                <p>
+                  Niniejsza polityka prywatności określa zasady funkcjonowania serwisu
+                  Carrd.co. Serwis nie zbiera ani nie przetwarza żadnych danych osobowych
+                  użytkowników, co zapewnia pełną ochronę prywatności.
+                </p>
+                <p><em>2. Pliki cookies</em></p>
+                <p>
+                  Serwis wykorzystuje wyłącznie niezbędne pliki cookies techniczne, które
+                  są wymagane do prawidłowego działania strony. Te pliki cookies nie służą
+                  do zbierania żadnych danych osobowych ani do śledzenia użytkowników, co
+                  gwarantuje bezpieczeństwo korzystania z serwisu.
+                </p>
+                <p><em>3. Brak zbierania danych</em></p>
+                <p><em>Serwis:</em></p>
+                <ul class="privacy__list">
+                  <li>Nie zbiera danych osobowych</li>
+                  <li>Nie wymaga rejestracji</li>
+                  <li>Nie prowadzi newslettera</li>
+                  <li>Nie śledzi zachowań użytkowników</li>
+                  <li>Nie wykorzystuje narzędzi analitycznych</li>
+                </ul>
+                <p><em>4. Zmiany w polityce prywatności</em></p>
+                <p>
+                  Administrator zastrzega sobie prawo do zmiany niniejszej polityki
+                  prywatności w dowolnym czasie. O wszelkich zmianach użytkownicy będą
+                  informowani z odpowiednim wyprzedzeniem, aby mogli dostosować się do
+                  nowych zasad.
+                </p>
+              </div>
+            </section>
+          </div>
+
+          <footer class="panel__footer">
+            <p>© 2026 Carrd. All Rights Reserved.</p>
+          </footer>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="links.js"></script>
+  <script src="favicons.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
