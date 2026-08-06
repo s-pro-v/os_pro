@@ -1,6 +1,16 @@
 const ASSET_IMG =
   "https://raw.githubusercontent.com/s-pro-v/os_pro/refs/heads/main/assets/images";
 
+const HOME_LINKS_URL =
+  "https://raw.githubusercontent.com/s-pro-v/json-lista/refs/heads/main/linki/home.json";
+
+let LINKS = {
+  home: [],
+  form: [],
+  folder: [],
+  all: [],
+};
+
 const meta = {
   home: {
     title: "Home",
@@ -113,6 +123,76 @@ function setPanelImage(src) {
   img.src = src;
 }
 
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function escapeAttr(value) {
+  return escapeHtml(value).replace(/`/g, "&#96;");
+}
+
+function normalizeRemoteLink(item) {
+  const href = item?.url || item?.href || "";
+  const label = item?.name || item?.label || href;
+  if (!href || !label) return null;
+
+  const desc =
+    item?.desc ||
+    (item?.type ? String(item.type).replace(/_/g, " ") : "") ||
+    "";
+
+  return {
+    href,
+    label,
+    desc,
+    favicon: item?.favicon || "",
+  };
+}
+
+function splitIntoGroups(items, groupCount = 4) {
+  const groups = Array.from({ length: groupCount }, () => []);
+  if (!items.length) return groups;
+
+  const base = Math.floor(items.length / groupCount);
+  const rem = items.length % groupCount;
+  let offset = 0;
+
+  for (let i = 0; i < groupCount; i++) {
+    const size = base + (i < rem ? 1 : 0);
+    groups[i] = items.slice(offset, offset + size);
+    offset += size;
+  }
+
+  return groups;
+}
+
+function buildLinksFromHome(items) {
+  const links = (Array.isArray(items) ? items : [])
+    .filter((item) => !item?.status || item.status === "ACTIVE")
+    .map(normalizeRemoteLink)
+    .filter(Boolean);
+
+  const [home, form, folder, all] = splitIntoGroups(links, 4);
+
+  return { home, form, folder, all };
+}
+
+async function loadLinks() {
+  const response = await fetch(HOME_LINKS_URL, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`Nie udało się pobrać linków (${response.status})`);
+  }
+
+  const data = await response.json();
+  LINKS = buildLinksFromHome(data);
+  renderLinks();
+}
+
 function renderLinks() {
   document.querySelectorAll("[data-links]").forEach((list) => {
     const key = list.dataset.links;
@@ -123,19 +203,19 @@ function renderLinks() {
         const favicon = link.favicon || getFaviconUrl(link.href);
         return `
       <li>
-        <a class="glass-btn" href="${link.href}" target="_blank" rel="noopener">
+        <a class="glass-btn" href="${escapeAttr(link.href)}" target="_blank" rel="noopener">
           <span class="glass-btn__favicon">
             <img
               class="glass-btn__favicon-img"
-              src="${favicon}"
+              src="${escapeAttr(favicon)}"
               alt=""
               loading="lazy"
               data-attempt="0"
             />
           </span>
           <span class="glass-btn__text">
-            <span class="glass-btn__label">${link.label}</span>
-            ${link.desc ? `<span class="glass-btn__desc">${link.desc}</span>` : ""}
+            <span class="glass-btn__label">${escapeHtml(link.label)}</span>
+            ${link.desc ? `<span class="glass-btn__desc">${escapeHtml(link.desc)}</span>` : ""}
           </span>
         </a>
       </li>`;
@@ -228,9 +308,13 @@ document.addEventListener("mousedown", (event) => {
 });
 
 preloadBackgrounds();
-renderLinks();
 if (imageEl) imageEl.dataset.src = meta.home.image;
 showSection("home");
+
+loadLinks().catch((error) => {
+  console.error(error);
+  renderLinks();
+});
 
 if (window.LKS_GUARD) {
   window.LKS_GUARD.startNavClock?.();
