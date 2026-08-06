@@ -160,7 +160,11 @@
                     </div>
 
                     <footer class="panel__footer">
-                        <p>© 2026 Carrd. All Rights Reserved.</p>
+                        <p>© <span id="footer-year"></span> Carrd. All Rights Reserved.</p>
+                        <script>
+                            document.getElementById("footer-year").textContent = new Date().getFullYear();
+                        </script>
+
                     </footer>
                 </div>
             </div>
