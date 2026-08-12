@@ -1025,13 +1025,13 @@ body.lks-guard-passed .panel__privacy.is-hidden {
 .link-list {
     list-style: none;
     margin: 0 auto;
-    padding: 0;
+    padding: 0.125rem;
     display: grid;
     grid-template-columns: var(--grid-columns);
     justify-content: center;
-    gap: var(--grid-gap);
+    gap: 0.125rem;
     width: fit-content;
-    max-width: 100%;
+    max-width: 100%
 }
 
 .link-list > li {
