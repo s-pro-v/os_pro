@@ -65,17 +65,15 @@
     --shadow-active: inset 0 2px 4px rgba(0, 0, 0, 0.8);
 
     --stripe-accent: rgba(0, 0, 0, 0.06);
-    --bg-stripe-pattern: linear-gradient(
-        135deg,
-        transparent 0%,
-        transparent 25%,
-        var(--stripe-accent) 25%,
-        var(--stripe-accent) 50%,
-        transparent 50%,
-        transparent 75%,
-        var(--stripe-accent) 75%,
-        var(--stripe-accent) 100%
-    );
+    --bg-stripe-pattern: linear-gradient(135deg,
+            transparent 0%,
+            transparent 25%,
+            var(--stripe-accent) 25%,
+            var(--stripe-accent) 50%,
+            transparent 50%,
+            transparent 75%,
+            var(--stripe-accent) 75%,
+            var(--stripe-accent) 100%);
     --bg-stripe-size: 20px 20px;
 
     --grid-color: rgba(255, 255, 255, 0.03);
@@ -188,9 +186,7 @@
     --aside-title-min-height: calc(var(--font-size-title) * 1.15 * 2);
     --aside-subtitle-min-height: calc(var(--font-size-subtitle) * 1.25 + var(--subtitle-margin-top));
     --aside-privacy-block-height: calc(var(--btn-privacy-height) + var(--privacy-margin-top));
-    --aside-header-min-height: calc(
-        var(--aside-title-min-height) + var(--aside-subtitle-min-height) + var(--aside-privacy-block-height)
-    );
+    --aside-header-min-height: calc(var(--aside-title-min-height) + var(--aside-subtitle-min-height) + var(--aside-privacy-block-height));
 
     /* ——— Content ——— */
     --content-padding: 2.25rem 2.5rem 1.75rem;
@@ -269,21 +265,17 @@
     --bg-all: url("https://raw.githubusercontent.com/s-pro-v/img/refs/heads/main/G%20img/g7.png");
     --bg-privacy: url("https://raw.githubusercontent.com/s-pro-v/img/refs/heads/main/G%20img/g6.png");
 
-    --background-image: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 10px,
-        var(--grid-color) 10px,
-        var(--grid-color) 11px
-    );
+    --background-image: repeating-linear-gradient(45deg,
+            transparent,
+            transparent 10px,
+            var(--grid-color) 10px,
+            var(--grid-color) 11px);
 
-    --bg-mode: repeating-linear-gradient(
-        -45deg,
-        transparent,
-        transparent 10px,
-        var(--grid-color) 10px,
-        var(--grid-color) 11px
-    );
+    --bg-mode: repeating-linear-gradient(-45deg,
+            transparent,
+            transparent 10px,
+            var(--grid-color) 10px,
+            var(--grid-color) 11px);
     --sections-container: url("https://raw.githubusercontent.com/skokivPr/img/779e8454ad2b78d3eeade03ea2bd9824da733f96/container01.svg");
     --sections-container-opacity: 0.5;
     --sections-container-brightness: 2;
@@ -495,7 +487,7 @@ body {
     box-shadow: var(--shadow-inset);
 }
 
-.panel__sections > .section {
+.panel__sections>.section {
     position: relative;
     z-index: 2;
 }
@@ -713,7 +705,7 @@ body.lks-guard-passed .panel__privacy.is-hidden {
     }
 }
 
-.nav-pill > span:not(.nav-pill__media):not(.nav-pill__lks) {
+.nav-pill>span:not(.nav-pill__media):not(.nav-pill__lks) {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -737,7 +729,7 @@ body.lks-guard-passed .panel__privacy.is-hidden {
     line-height: 0;
 }
 
-.nav-pill__icon {
+.nav-pill svg {
     display: block;
     width: 30px;
     height: 30px;
@@ -747,6 +739,11 @@ body.lks-guard-passed .panel__privacy.is-hidden {
     transition:
         fill var(--transition-base),
         opacity var(--transition-btn);
+    filter: drop-shadow(2px 2px 1px black);
+}
+
+.nav-pill:hover svg {
+    opacity: var(--favicon-icon-opacity-hover);
     filter: drop-shadow(2px 2px 1px black);
 }
 
@@ -783,6 +780,15 @@ body.lks-guard-passed .panel__privacy.is-hidden {
     background: var(--glass-bg-active);
     box-shadow: var(--shadow-inset);
     border-color: var(--border-color);
+}
+
+.nav-pill--active svg {
+    opacity: 1;
+}
+
+.nav-pill--active .nc-icon-wrapper {
+    filter: sepia(0.25) saturate(2) hue-rotate(10deg) brightness(1.3) contrast(1.1);
+
 }
 
 .nav-pill:focus-visible {
@@ -968,6 +974,7 @@ body.lks-guard-passed .panel__privacy.is-hidden {
 }
 
 @keyframes lks-nav-pulse {
+
     0%,
     100% {
         opacity: 0.35;
@@ -1034,7 +1041,7 @@ body.lks-guard-passed .panel__privacy.is-hidden {
     max-width: 100%
 }
 
-.link-list > li {
+.link-list>li {
     display: flex;
     min-height: var(--btn-height);
 }
