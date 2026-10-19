@@ -203,21 +203,23 @@ function renderLinks() {
         const favicon = link.favicon || getFaviconUrl(link.href);
         return `
       <li>
-        <a class="glass-btn" href="${escapeAttr(link.href)}" target="_blank" rel="noopener">
-          <span class="glass-btn__favicon">
-            <img
-              class="glass-btn__favicon-img"
-              src="${escapeAttr(favicon)}"
-              alt=""
-              loading="lazy"
-              data-attempt="0"
-            />
-          </span>
-          <span class="glass-btn__text">
-            <span class="glass-btn__label">${escapeHtml(link.label)}</span>
-            ${link.desc ? `<span class="glass-btn__desc">${escapeHtml(link.desc)}</span>` : ""}
-          </span>
-        </a>
+        <div class="btn-bg">
+          <a class="glass-btn" href="${escapeAttr(link.href)}" target="_blank" rel="noopener">
+            <span class="glass-btn__favicon">
+              <img
+                class="glass-btn__favicon-img"
+                src="${escapeAttr(favicon)}"
+                alt=""
+                loading="lazy"
+                data-attempt="0"
+              />
+            </span>
+            <span class="glass-btn__text">
+              <span class="glass-btn__label">${escapeHtml(link.label)}</span>
+              ${link.desc ? `<span class="glass-btn__desc">${escapeHtml(link.desc)}</span>` : ""}
+            </span>
+          </a>
+        </div>
       </li>`;
       })
       .join("");

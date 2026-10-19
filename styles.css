@@ -224,7 +224,7 @@
     --grid-columns: repeat(3, minmax(12rem, 15rem));
     --grid-columns-tablet: repeat(2, minmax(12rem, 15rem));
     --grid-columns-mobile: minmax(12rem, 22rem);
-    --grid-gap: 0.65rem;
+    --grid-gap: 0.125rem;
     --grid-rows: 8;
     --sections-content-height: calc(var(--btn-height) * var(--grid-rows) + var(--grid-gap) * (var(--grid-rows) - 1));
     --grid-col-min: 12rem;
@@ -241,6 +241,8 @@
     --underline-offset: 3px;
 
     /* ——— Odstępy ——— */
+    --padding: 0.125rem;
+    --gap: 0.125rem;
     --divider-margin: 0 0 1rem;
     --footer-padding-top: 1rem;
     --privacy-margin-top: 1rem;
@@ -259,9 +261,9 @@
     --transition-fade: 0.35s ease;
 
     /* ——— Tła sekcji ——— */
-    --bg-home: url("https://raw.githubusercontent.com/s-pro-v/img/refs/heads/main/G%20img/g1.png");
-    --bg-form: url("https://raw.githubusercontent.com/s-pro-v/img/refs/heads/main/G%20img/g3.png");
-    --bg-folder: url("https://raw.githubusercontent.com/s-pro-v/img/refs/heads/main/G%20img/g4.png");
+    --bg-home: url("assets/images/bg.jpg");
+    --bg-form: url("assets/images/bg4.jpg");
+    --bg-folder: url("assets/images/bg5.jpg");
     --bg-all: url("https://raw.githubusercontent.com/s-pro-v/img/refs/heads/main/G%20img/g7.png");
     --bg-privacy: url("https://raw.githubusercontent.com/s-pro-v/img/refs/heads/main/G%20img/g6.png");
 
@@ -305,8 +307,22 @@ body {
     min-height: 100vh;
     font-family: var(--font-mono);
     color: var(--text);
-    background: var(--color-body);
+    background: var(--bg-color);
     overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background-color: var(--bg-color);
+    background-image: var(--bg-grid);
+    background-size: var(--bg-grid-size);
+    background-repeat: repeat;
+    opacity: var(--sections-container-opacity);
+    filter: brightness(var(--sections-container-brightness));
+    pointer-events: none;
 }
 
 /* ——— Tło ——— */
@@ -409,6 +425,7 @@ body {
     align-items: stretch;
     min-height: var(--panel-min-height);
     max-height: var(--panel-height);
+
 }
 
 .panel__aside {
@@ -422,6 +439,27 @@ body {
     background: var(--glass-bg-aside);
     align-self: stretch;
     min-height: 100%;
+    background-image: url("assets/images/bg.jpg");
+    background-position: left;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+
+}
+
+.panel__aside::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-color: var(--bg);
+    background-image: var(--bg-grid);
+    background-size: var(--bg-grid-size);
+    background-repeat: repeat;
+    opacity: var(--sections-container-opacity);
+    filter: brightness(var(--sections-container-brightness));
+    pointer-events: none;
+
 }
 
 .panel__visual {
@@ -466,10 +504,24 @@ body {
     background-color: var(--color-body);
     min-height: var(--sections-content-height);
     padding-right: var(--sections-padding-right);
-    background-image: url("https://raw.githubusercontent.com/skokivPr/img/779e8454ad2b78d3eeade03ea2bd9824da733f96/container01.svg");
-    background-size: cover;
+
+}
+
+
+.panel__sections::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-color: var(--bg-color);
+    background-image: url("assets/images/bg16.png");
+    background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
+    opacity: var(--sections-container-opacity);
+    filter: brightness(var(--sections-container-brightness));
+    pointer-events: none;
+
 }
 
 .panel__sections::after {
@@ -477,14 +529,19 @@ body {
     position: absolute;
     inset: 0;
     z-index: 1;
-    background-color: var(--color-bg);
+    background-color: var(--bg);
     background-image: var(--bg-grid);
     background-size: var(--bg-grid-size);
     background-repeat: repeat;
     opacity: var(--sections-container-opacity);
     filter: brightness(var(--sections-container-brightness));
     pointer-events: none;
-    box-shadow: var(--shadow-inset);
+    border: 1px solid var(--border-color);
+    transition: var(--transition-base);
+}
+
+.panel__sections:hover::after {
+    border-color: var(--border-color-hover);
 }
 
 .panel__sections>.section {
@@ -543,6 +600,14 @@ body {
     color: var(--text-muted);
     letter-spacing: var(--letter-spacing-subtitle);
     text-transform: uppercase;
+    background-color: var(--bg-color);
+    padding: 0.5rem;
+    z-index: 2;
+    width: 500px;
+    box-shadow: var(--shadow-inset);
+    filter: brightness(120%);
+    animation: panel-in var(--transition-panel);
+    border: 1px solid var(--border-color)
 }
 
 .panel__subtitle--empty {
@@ -609,14 +674,14 @@ body.lks-guard-passed .panel__privacy.is-hidden {
 .nav-pills {
     display: flex;
     flex-wrap: nowrap;
-    gap: 0.15rem;
+    gap: 0.125rem;
     justify-content: flex-start;
     width: 100%;
     margin-bottom: var(--nav-margin-bottom);
     flex-shrink: 0;
     box-shadow: var(--shadow-inset);
     background-color: var(--color-bg);
-    padding: 0.15rem;
+    padding: 0.125rem;
     overflow: hidden;
     position: relative;
 }
@@ -1028,6 +1093,36 @@ body.lks-guard-passed .panel__privacy.is-hidden {
     }
 }
 
+.btn-bg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--shadow-inset);
+    padding: var(--padding);
+    gap: var(--gap);
+    position: relative;
+    overflow: hidden;
+    width: fit-content;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    transition: var(--transition-base);
+}
+
+.btn-bg:hover {
+    border-color: var(--border-color-hover);
+}
+
+.link-list>li>.btn-bg {
+    width: 100%;
+    height: 100%;
+}
+
+.panel__privacy.is-hidden .btn-bg {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
 /* ——— Przyciski glass ——— */
 .link-list {
     list-style: none;
@@ -1036,9 +1131,9 @@ body.lks-guard-passed .panel__privacy.is-hidden {
     display: grid;
     grid-template-columns: var(--grid-columns);
     justify-content: center;
-    gap: 0.125rem;
+    gap: var(--grid-gap);
     width: fit-content;
-    max-width: 100%
+    max-width: 100%;
 }
 
 .link-list>li {
