@@ -1,4 +1,4 @@
- (function () {
+(function () {
   if (customElements.get("lks-guard-vault")) return;
 
   class LksGuardVault extends HTMLElement {
@@ -28,22 +28,25 @@
       var safetyStyle = document.createElement("style");
       safetyStyle.id = "lks-lock-style";
       safetyStyle.textContent = "body > *:not(lks-guard-vault) { visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }";
-      document.head.appendChild(safetyStyle);
+      if (document.head) {
+        document.head.appendChild(safetyStyle);
+      }
 
       var observer = new MutationObserver(function () {
-        if (!document.querySelector("lks-guard-vault")) {
+        if (!document.querySelector("lks-guard-vault") && document.body) {
           document.body.innerHTML = "";
           location.reload();
         }
       });
-      observer.observe(document.body, { childList: true, subtree: true });
+      if (document.body) {
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
     }
 
     initDevToolsShield() {
       var C = (window.LKS_GUARD = window.LKS_GUARD || {});
       var H = this.getAttribute("hub-url") || C.HUB_URL || "https://s-pro-v.github.io/guard/";
 
-      // 1. Blokada skrótów klawiszowych i menu kontekstowego
       window.addEventListener("keydown", function (e) {
         if (
           e.keyCode === 123 ||
@@ -61,7 +64,6 @@
         e.preventDefault();
       });
 
-      // 2. Wykrywanie wymiarów okna (DevTools docked)
       var threshold = 160;
       setInterval(function () {
         if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
@@ -72,7 +74,6 @@
         }
       }, 1000);
 
-      // 3. Pułapka anty-debuggingowa (pętla debugger;)
       setInterval(function () {
         var t = Date.now();
         debugger;
@@ -83,7 +84,6 @@
     }
 
     render() {
-      var C = (window.LKS_GUARD = window.LKS_GUARD || {});
       var ICON_LOCK = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
 
       var leds = "";
@@ -418,7 +418,16 @@
   }
 
   customElements.define("lks-guard-vault", LksGuardVault);
-  if (!document.querySelector("lks-guard-vault")) {
-    document.body.prepend(document.createElement("lks-guard-vault"));
+
+  function mountGuard() {
+    if (!document.querySelector("lks-guard-vault") && document.body) {
+      document.body.prepend(document.createElement("lks-guard-vault"));
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", mountGuard);
+  } else {
+    mountGuard();
   }
 })();
