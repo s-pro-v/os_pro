@@ -318,16 +318,174 @@ loadLinks().catch((error) => {
   renderLinks();
 });
 
-if (window.LKS_GUARD) {
-  window.LKS_GUARD.startNavClock?.();
-  if (typeof window.LKS_GUARD.sessOk === "function") {
-    if (window.LKS_GUARD.sessOk()) {
-      window.LKS_GUARD.updateNavStatus?.("ok", "OK", "SESJA");
-    } else {
-      window.LKS_GUARD.updateNavStatus?.("wait", "LKS", "CZEKAJ…");
-    }
+// --- LKS GUARD: Zegar nawigacji & Weryfikacja sesji ---
+function pad2(num) {
+  return String(num).padStart(2, "0");
+}
+
+function updateNavClock() {
+  const now = new Date();
+  const dateStr = `${pad2(now.getDate())}.${pad2(now.getMonth() + 1)}.${now.getFullYear()}`;
+  const timeStr = `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`;
+
+  const dateEl = document.getElementById("lks-nav-date");
+  const timeEl = document.getElementById("lks-nav-time");
+
+  if (dateEl && dateEl.textContent !== dateStr) {
+    dateEl.textContent = dateStr;
+  }
+  if (timeEl && timeEl.textContent !== timeStr) {
+    timeEl.textContent = timeStr;
+    timeEl.setAttribute("datetime", now.toISOString());
   }
 }
+
+function getSessionState() {
+  if (
+    window.LKS_GUARD_EXTERNAL &&
+    typeof window.LKS_GUARD_EXTERNAL.sessOk === "function"
+  ) {
+    try {
+      if (window.LKS_GUARD_EXTERNAL.sessOk()) return "ok";
+    } catch (_) {}
+  }
+
+  const sk = sessionStorage.getItem("lks_vault_auth");
+  const sdk = sessionStorage.getItem("lks_vault_auth_date");
+  const today = new Date().toDateString();
+  if (sk === "VALID" && sdk === today) {
+    return "ok";
+  }
+
+  if (document.body && document.body.classList.contains("lks-guard-passed")) {
+    return "ok";
+  }
+
+  if (localStorage.getItem("lks_render_auth_token")) {
+    return "ok";
+  }
+
+  const l0 = document.getElementById("L0");
+  if (l0 && !l0.classList.contains("d")) {
+    return "wait";
+  }
+
+  const isLocal =
+    location.protocol === "file:" ||
+    location.hostname === "localhost" ||
+    location.hostname === "127.0.0.1";
+  if (isLocal) {
+    return "ok";
+  }
+
+  return "stop";
+}
+
+function updateNavStatus(state, label, status) {
+  const container = document.getElementById("lks-nav-status");
+  if (!container) return;
+
+  const resolvedState = state || "ok";
+  if (container.dataset.lksState !== resolvedState) {
+    container.dataset.lksState = resolvedState;
+  }
+
+  const labelEl =
+    document.getElementById("lks-nav-label") ||
+    container.querySelector(".nav-pill__lks-label");
+  const statusEl =
+    document.getElementById("lks-nav-status-text") ||
+    container.querySelector(".nav-pill__lks-status");
+
+  let resolvedLabel = label;
+  let resolvedStatus = status;
+
+  if (resolvedState === "ok") {
+    if (!resolvedLabel || resolvedLabel === "OK" || resolvedLabel === "LKS") {
+      resolvedLabel = "SESJA";
+    }
+    if (!resolvedStatus || resolvedStatus === "SESJA") {
+      resolvedStatus = "Aktywna";
+    }
+  } else if (resolvedState === "wait") {
+    if (!resolvedLabel) resolvedLabel = "SESJA";
+    if (!resolvedStatus || resolvedStatus.startsWith("CZEKAJ")) {
+      resolvedStatus = "Sprawdzanie…";
+    }
+  } else {
+    if (!resolvedLabel) resolvedLabel = "SESJA";
+    if (!resolvedStatus) resolvedStatus = "Nieaktywna";
+  }
+
+  if (labelEl && labelEl.textContent !== resolvedLabel) {
+    labelEl.textContent = resolvedLabel;
+  }
+  if (statusEl && statusEl.textContent !== resolvedStatus) {
+    statusEl.textContent = resolvedStatus;
+  }
+}
+
+function refreshSessionStatus() {
+  const state = getSessionState();
+  if (state === "ok") {
+    updateNavStatus("ok", "SESJA", "Aktywna");
+  } else if (state === "wait") {
+    updateNavStatus("wait", "SESJA", "Sprawdzanie…");
+  } else {
+    updateNavStatus("stop", "SESJA", "Nieaktywna");
+  }
+}
+
+let navClockTimer = null;
+function startNavClock() {
+  updateNavClock();
+  refreshSessionStatus();
+
+  if (!navClockTimer) {
+    navClockTimer = setInterval(() => {
+      updateNavClock();
+      refreshSessionStatus();
+    }, 1000);
+  }
+}
+
+// Globalne API LKS_GUARD dla kompatybilności
+window.LKS_GUARD = {
+  startNavClock,
+  updateNavClock,
+  sessOk: () => getSessionState() === "ok",
+  updateNavStatus,
+  refreshSessionStatus,
+  getSessionState,
+};
+
+startNavClock();
+
+if (document.body) {
+  try {
+    const sessionObserver = new MutationObserver(() => {
+      refreshSessionStatus();
+    });
+    sessionObserver.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+      childList: true,
+    });
+  } catch (_) {}
+}
+
+window.addEventListener("storage", refreshSessionStatus);
+window.addEventListener("focus", refreshSessionStatus);
+window.addEventListener("message", (e) => {
+  if (
+    e.data &&
+    (e.data.type === "LKS_SESSION_STATUS" ||
+      e.data.type === "LKS_GUARD_LOGOUT" ||
+      e.data.type === "LKS_GUARD_LOGIN")
+  ) {
+    refreshSessionStatus();
+  }
+});
 
 // Add these to your existing script section
 document.addEventListener("DOMContentLoaded", function () {

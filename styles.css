@@ -425,6 +425,7 @@ body::before {
     align-items: stretch;
     min-height: var(--panel-min-height);
     max-height: var(--panel-height);
+    background: radial-gradient(circle at 50% 50%, rgba(27, 13, 3, 0.03) 0%, rgba(0, 0, 0, 0.6) 100%);
 
 }
 
@@ -460,6 +461,7 @@ body::before {
     filter: brightness(var(--sections-container-brightness));
     pointer-events: none;
 
+
 }
 
 .panel__visual {
@@ -491,6 +493,7 @@ body::before {
     min-width: 0;
     align-self: stretch;
     min-height: 100%;
+
 }
 
 .panel__sections {
@@ -505,6 +508,7 @@ body::before {
     min-height: var(--sections-content-height);
     padding-right: var(--sections-padding-right);
 
+
 }
 
 
@@ -514,7 +518,7 @@ body::before {
     inset: 0;
     z-index: 0;
     background-color: var(--bg-color);
-    background-image: url("assets/images/bg16.png");
+    background-image: url("assets/images/g1.png");
     background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
@@ -538,6 +542,7 @@ body::before {
     pointer-events: none;
     border: 1px solid var(--border-color);
     transition: var(--transition-base);
+
 }
 
 .panel__sections:hover::after {
@@ -680,7 +685,8 @@ body.lks-guard-passed .panel__privacy.is-hidden {
     margin-bottom: var(--nav-margin-bottom);
     flex-shrink: 0;
     box-shadow: var(--shadow-inset);
-    background-color: var(--color-bg);
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
     padding: 0.125rem;
     overflow: hidden;
     position: relative;
@@ -694,12 +700,13 @@ body.lks-guard-passed .panel__privacy.is-hidden {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--hover-bg);
+    background-color: var(--bg-color);
     background-image: var(--bg-stripe-pattern);
     background-size: var(--bg-stripe-size);
     background-repeat: repeat;
     pointer-events: none;
     box-shadow: var(--shadow-inset);
+    overflow: hidden;
 }
 
 .nav-pill {
@@ -722,7 +729,8 @@ body.lks-guard-passed .panel__privacy.is-hidden {
     text-transform: uppercase;
     letter-spacing: var(--letter-spacing-nav);
     color: var(--text-muted);
-    background: var(--glass-bg-nav);
+    background-color: var(--glass-bg-nav);
+    background-image: radial-gradient(circle at 50% 50%, rgba(27, 13, 3, 0.04) 0%, rgba(0, 0, 0, 0.35) 100%);
     border: 1px solid var(--glass-border);
     box-shadow: var(--shadow);
     cursor: pointer;
@@ -824,17 +832,20 @@ body.lks-guard-passed .panel__privacy.is-hidden {
 
 .nav-pill:hover {
     color: var(--text-hover);
-    background: var(--glass-bg-hover);
+    background-color: var(--glass-bg-hover);
+    background-image: radial-gradient(circle at 50% 50%, rgba(243, 108, 0, 0.07) 0%, rgba(0, 0, 0, 0.32) 100%);
     border-color: var(--glass-border-hover);
 }
 
 .nav-pill--active {
     color: var(--text);
-    background: var(--glass-bg-nav-active);
+    background-color: var(--glass-bg-nav-active);
+    background-image: radial-gradient(circle at 50% 50%, rgba(243, 108, 0, 0.12) 0%, rgba(0, 0, 0, 0.32) 100%);
 }
 
 .nav-pill--active:active {
-    background: var(--glass-bg-hover);
+    background-color: var(--glass-bg-hover);
+    background-image: radial-gradient(circle at 50% 50%, rgba(243, 108, 0, 0.08) 0%, rgba(0, 0, 0, 0.38) 100%);
 }
 
 .nav-pill:active .nav-pill__icon {
@@ -842,7 +853,8 @@ body.lks-guard-passed .panel__privacy.is-hidden {
 }
 
 .nav-pill:active {
-    background: var(--glass-bg-active);
+    background-color: var(--glass-bg-active);
+    background-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.45) 100%);
     box-shadow: var(--shadow-inset);
     border-color: var(--border-color);
 }
@@ -878,12 +890,13 @@ body.lks-guard-passed .panel__privacy.is-hidden {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--glass-bg-nav);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--shadow);
+    background-color: var(--glass-bg-nav);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-drop);
     cursor: default;
     pointer-events: none;
     z-index: 1;
+    background-image: radial-gradient(ellipse at 50% 50%, rgba(27, 13, 3, 0.04) 0%, rgba(0, 0, 0, 0.38) 100%);
 }
 
 .nav-pill--blocker::after {
@@ -921,6 +934,7 @@ body.lks-guard-passed .panel__privacy.is-hidden {
     text-transform: uppercase;
     color: var(--text-muted);
     white-space: nowrap;
+    background: radial-gradient(circle at 50% 50%, rgba(27, 13, 3, 0.03) 0%, rgba(0, 0, 0, 0.6) 100%);
 }
 
 .nav-pill__lks-dot {
@@ -939,7 +953,7 @@ body.lks-guard-passed .panel__privacy.is-hidden {
     flex-shrink: 0;
     min-height: 1.35rem;
     padding: 0.22rem 0.55rem;
-    border-radius: 2px;
+    border-radius: 0px;
     border: 1px solid rgba(243, 108, 0, 0.22);
     background: var(--highlight-bg);
     color: var(--lks-label-color);
